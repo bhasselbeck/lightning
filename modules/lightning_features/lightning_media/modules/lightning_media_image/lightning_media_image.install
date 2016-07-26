@@ -14,11 +14,11 @@ use Drupal\views\Entity\View;
  */
 function lightning_media_image_install() {
   // Create the image browser display of the media view.
-  lightning_media_image_8003();
+  lightning_media_image_update_8003();
 
   // Grants image browser access to the creator content role and the
   // media_creator and media_manager roles.
-  lightning_media_image_8004();
+  lightning_media_image_update_8004();
 }
 
 /**
