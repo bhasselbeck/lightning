@@ -24,6 +24,16 @@ function lightning_media_image_entity_form_display_presave(EntityFormDisplayInte
     return;
   }
 
+  $entity_type = $display->getTargetEntityTypeId();
+  $bundle = $display->getTargetBundle();
+
+  // Since the image browser integrates with the media library, it doesn't
+  // make sense to use the image browser when creating or editing an image
+  // media entity.
+  if ($entity_type == 'media' && $bundle == 'image') {
+    return;
+  }
+
   /** @var EntityFormDisplayInterface $original */
   $original = \Drupal::entityTypeManager()
     ->getStorage('entity_form_display')
@@ -31,9 +41,7 @@ function lightning_media_image_entity_form_display_presave(EntityFormDisplayInte
 
   $new_components = array_diff_key($display->getComponents(), $original->getComponents());
   foreach ($new_components as $component_id => $component) {
-    $field = FieldConfig::load(
-      $display->getTargetEntityTypeId() . '.' . $display->getTargetBundle() . '.' . $component_id
-    );
+    $field = FieldConfig::load($entity_type . '.' . $bundle . '.' . $component_id);
 
     if ($field->getType() == 'image') {
       $display->setComponent($component_id, [
