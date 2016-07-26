@@ -67,12 +67,34 @@ function lightning_install_module($module) {
  *
  * @param array $install_state
  *   The current install state.
+ *
+ * @return array
+ *   A renderable array with a success message and a redirect header, if the
+ *   extender is configured with one.
  */
 function lightning_post_install_redirect(array &$install_state) {
+  $output = [
+    '#title' => t('Ready to rock'),
+    '#markup' => t('Congratulations, you installed Lightning!'),
+    '#attached' => [
+      'http_header' => [
+        ['Cache-Control', 'no-cache'],
+      ],
+    ],
+  ];
+
   $redirect = \Drupal::service('lightning.extender')->getRedirect();
   if ($redirect) {
-    install_goto($redirect);
+    $meta_redirect = [
+      '#tag' => 'meta',
+      '#attributes' => [
+        'http-equiv' => 'refresh',
+        'content' => '0;url=' . $redirect,
+      ],
+    ];
+    $output['#attached']['html_head'][] = [$meta_redirect, 'meta_redirect'];
   }
+  return $output;
 }
 
 /**
