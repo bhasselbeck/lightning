@@ -15,6 +15,10 @@ use Drupal\views\Entity\View;
 function lightning_media_image_install() {
   // Create the image browser display of the media view.
   lightning_media_image_8003();
+
+  // Grants image browser access to the creator content role and the
+  // media_creator and media_manager roles.
+  lightning_media_image_8004();
 }
 
 /**
@@ -543,6 +547,21 @@ function lightning_media_image_8003() {
 }
 
 /**
+ * Grants image browser access to media_creator role and creator content role.
+ */
+function lightning_media_image_8004() {
+  $permissions = ['access image_browser entity browser pages'];
+
+  // Media creators and managers can always access the image browser.
+  user_role_grant_permissions('media_creator', $permissions);
+  user_role_grant_permissions('media_manager', $permissions);
+
+  // Any content creator can as well.
+  \Drupal::service('lightning.content_roles')
+    ->grantPermissions('creator', $permissions);
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_image_update_dependencies() {
@@ -551,6 +570,11 @@ function lightning_media_image_update_dependencies() {
       8003 => [
         // 8003 modifies the image_browser entity browser, which is created by
         // Lightning Media Image 8002.
+        'lightning_media_image' => 8002,
+      ],
+      8004 => [
+        // 8004 grants access the image_browser entity browser, which is created
+        // by Lightning Media Image 8002.
         'lightning_media_image' => 8002,
       ],
     ],
