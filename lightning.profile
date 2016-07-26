@@ -75,7 +75,9 @@ function lightning_install_module($module) {
 function lightning_post_install_redirect(array &$install_state) {
   $output = [
     '#title' => t('Ready to rock'),
-    '#markup' => t('Congratulations, you installed Lightning!'),
+    'info' => [
+      '#markup' => t('Congratulations, you installed Lightning!'),
+    ],
     '#attached' => [
       'http_header' => [
         ['Cache-Control', 'no-cache'],
@@ -93,6 +95,11 @@ function lightning_post_install_redirect(array &$install_state) {
       ],
     ];
     $output['#attached']['html_head'][] = [$meta_redirect, 'meta_redirect'];
+
+    // Add a redirect link, in case the meta tag fails for whatever reason.
+    $output['redirect']['#markup'] = t('If you are not redirected in 5 seconds, <a href="@url">click here</a> to proceed to your site.', [
+      '@url' => $redirect,
+    ]);
   }
   return $output;
 }
