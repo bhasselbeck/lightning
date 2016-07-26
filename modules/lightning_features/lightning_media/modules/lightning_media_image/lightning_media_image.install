@@ -47,10 +47,6 @@ function lightning_media_image_8003() {
   $display_id = $view->addDisplay('entity_browser', 'Image Browser');
   $display = &$view->getDisplay($display_id);
   $display = array_merge($display, array(
-    'display_plugin' => 'entity_browser',
-    'id' => 'image_browser',
-    'display_title' => 'Image Browser',
-    'position' => 2,
     'display_options' =>
       array(
         'display_extenders' =>
@@ -209,8 +205,8 @@ function lightning_media_image_8003() {
                 'element_label_class' => '',
                 'element_label_colon' => FALSE,
                 'element_wrapper_type' => '',
-                'element_wrapper_class' => '',
-                'element_default_classes' => TRUE,
+                'element_wrapper_class' => 'visually-hidden',
+                'element_default_classes' => FALSE,
                 'empty' => '',
                 'hide_empty' => FALSE,
                 'empty_zero' => FALSE,
